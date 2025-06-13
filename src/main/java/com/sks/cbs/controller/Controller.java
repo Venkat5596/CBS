@@ -1,5 +1,7 @@
-package com.sks.cbs.config;
+package com.sks.cbs.controller;
 
+import com.sks.cbs.config.ODataParser;
+//import com.sks.cbs.config.Parser;
 import com.sks.cbs.model.CustomDutyProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +16,12 @@ import java.util.List;
 @RestController
 public class Controller {
     private final WebClient webClient;
+    private final ODataParser parser;
 
     @Autowired
-    public Controller(WebClient webClient) {
+    public Controller(WebClient webClient, ODataParser parser) {
         this.webClient = webClient;
+        this.parser = parser;
     }
 
     @GetMapping("/get")
@@ -29,7 +33,7 @@ public class Controller {
                 .doOnNext(System.out::println)
                 .map(xml -> {
                     try {
-                        return new Parser().parseCustomsDuties(xml);
+                        return parser.parseCustomsDuties(xml);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
