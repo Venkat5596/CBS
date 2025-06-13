@@ -1,7 +1,5 @@
 package com.sks.cbs.model;
 
-
-//import jdk.jfr.Category;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.juneau.annotation.BeanConfig;
@@ -11,15 +9,12 @@ import java.util.List;
 
 @Getter
 @Setter
-@Xml(childName = "entry",prefix = "atom", namespace = Xmls.ATOM)
-@BeanConfig(ignoreUnknownBeanProperties = "true" )
+@Xml(childName = "entry")
+@BeanConfig(ignoreUnknownBeanProperties = "true")
 public class ODataEntry {
 
-    @Xml(childName = "id" )
+    @Xml(childName = "id")
     private String id;
-
-//    @Xml(childName = "title",prefix = "atom",namespace = Xmls.ATOM)
-//    private TitleElement title;
 
     @Xml(childName = "title")
     private String title;
@@ -27,15 +22,12 @@ public class ODataEntry {
     @Xml(childName = "updated")
     private String updated;
 
-    @Xml(childName = "category" )
+    @Xml(childName = "category")
     private Category category;
 
-
-    @Xml(childName="link")
+    @Xml(childName = "link")
     private List<ODataLink> link;
 
-
-    @Xml(childName = "content",prefix = "atom",namespace = Xmls.ATOM)
+    @Xml(childName = "content")
     private ODataContent content;
-
 }

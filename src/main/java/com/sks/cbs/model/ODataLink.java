@@ -3,21 +3,19 @@ package com.sks.cbs.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.juneau.xml.annotation.Xml;
+import org.apache.juneau.xml.annotation.XmlFormat;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-//@XmlRootElement(name = "link" , namespace = Xmls.ATOM)
-@Xml
+@Xml(childName = "link")
 @Getter
 @Setter
 public class ODataLink {
 
-    @XmlAttribute(name = "href")
+    @Xml(childName = "href", format = XmlFormat.ATTR)
     private String href;
-@XmlAttribute(name = "rel")
+
+    @Xml(childName = "rel", format = XmlFormat.ATTR)
     private String rel;
-@XmlAttribute(name = "title")
+
+    @Xml(childName = "title", format = XmlFormat.ATTR)
     private String title;
 }

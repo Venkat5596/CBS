@@ -1,24 +1,22 @@
 package com.sks.cbs.controller;
 
+import com.sks.cbs.config.ManualXmlParser;
 import com.sks.cbs.config.ODataParser;
 import com.sks.cbs.model.CustomDutyProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-//import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-
 
 @RestController
 @RequiredArgsConstructor
 public class Controller {
     private final WebClient webClient;
     private final ODataParser parser;
-
+    private final ManualXmlParser manualParser;
 
     @GetMapping("/get")
     public Mono<List<CustomDutyProperties>> getGSTCodesMono() {
@@ -26,60 +24,45 @@ public class Controller {
                 .uri("/gstCodes")
                 .retrieve()
                 .bodyToMono(String.class)
-                .doOnNext(System.out::println)
+                .doOnNext(xml -> System.out.println("Received XML: " + xml.substring(0, Math.min(500, xml.length()))))
                 .map(xml -> {
                     try {
-                        return parser.parseCustomsDuties(xml);
+                        // Try Juneau parser first
+                        List<CustomDutyProperties> result = parser.parseCustomsDuties(xml);
+                        if (result.isEmpty()) {
+                            System.out.println("Juneau parser returned empty result, trying manual parser...");
+                            result = manualParser.parseCustomsDuties(xml);
+                        }
+                        return result;
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        System.err.println("Error with Juneau parser, trying manual parser: " + e.getMessage());
+                        try {
+                            return manualParser.parseCustomsDuties(xml);
+                        } catch (Exception e2) {
+                            System.err.println("Manual parser also failed: " + e2.getMessage());
+                            throw new RuntimeException("Both parsers failed", e2);
+                        }
                     }
-                });}
+                });
+    }
 
+    @GetMapping("/get-manual")
+    public Mono<List<CustomDutyProperties>> getGSTCodesManual() {
+        return webClient.get()
+                .uri("/gstCodes")
+                .retrieve()
+                .bodyToMono(String.class)
+                .doOnNext(xml -> System.out.println("Received XML: " + xml.substring(0, Math.min(500, xml.length()))))
+                .map(manualParser::parseCustomsDuties);
+    }
 
-
-
-@GetMapping("/getstring")
-public Mono<String> getGSTCodesMono1() {
-    return  webClient.get()
-            .uri(uriBuilder -> uriBuilder
-                    .path("/gstCodes")
-                    .build())
-            .retrieve()
-            .bodyToMono(String.class);
-//            .map(xml -> {
-//                try {
-//                    return new Paser().parse(xml);
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-
+    @GetMapping("/getstring")
+    public Mono<String> getGSTCodesMono1() {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/gstCodes")
+                        .build())
+                .retrieve()
+                .bodyToMono(String.class);
+    }
 }
-
-}
-
-
-
-//    @GetMapping("/getGSTCodes")
-//    public ResponseEntity<String> getGSTCodes(){
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setAccept(List.of(MediaType.APPLICATION_XML));
-//        System.out.println(headers);
-//        headers.set("Accept-Language", "EN");
-//        System.out.println(headers);
-//        HttpEntity<String> entity = new HttpEntity<>(headers);
-//        System.out.println(entity);
-//
-//       // return restTemplate.getForObject(WebClientConfig.BASE_URL, String.class);
-//
-//        return restTemplate
-//                .exchange(WebClientConfig.BASE_URL,
-//                        HttpMethod.GET,
-//                        entity,
-//                        String.class);
-//    }
-//
-//    public WebClient getWebClient() {
-//        return webClient;
-//    }
-//}
