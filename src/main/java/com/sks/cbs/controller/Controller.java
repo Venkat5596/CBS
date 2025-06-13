@@ -1,6 +1,9 @@
-package com.sks.cbs.config;
+package com.sks.cbs.controller;
 
+import com.sks.cbs.config.ODataParser;
+//import com.sks.cbs.config.Parser;
 import com.sks.cbs.model.CustomDutyProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,13 +15,11 @@ import java.util.List;
 
 
 @RestController
+@RequiredArgsConstructor
 public class Controller {
     private final WebClient webClient;
+    private final ODataParser parser;
 
-    @Autowired
-    public Controller(WebClient webClient) {
-        this.webClient = webClient;
-    }
 
     @GetMapping("/get")
     public Mono<List<CustomDutyProperties>> getGSTCodesMono() {
@@ -29,7 +30,7 @@ public class Controller {
                 .doOnNext(System.out::println)
                 .map(xml -> {
                     try {
-                        return new Parser().parseCustomsDuties(xml);
+                        return parser.parseCustomsDuties(xml);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

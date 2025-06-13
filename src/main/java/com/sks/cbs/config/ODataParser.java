@@ -1,7 +1,6 @@
 package com.sks.cbs.config;
 
 import com.sks.cbs.model.CustomDutyProperties;
-import com.sks.cbs.model.ODataEntry;
 import com.sks.cbs.model.ODataFeed;
 //import lombok.RequiredArgsConstructor;
 //import org.apache.juneau.BeanContext;
@@ -12,11 +11,11 @@ import java.util.List;
 //import java.util.Map;
 
 @Component
-public class Parser {
+public class ODataParser {
 
     private final XmlParser xmlParser;
 
-    public Parser() {
+    public ODataParser() {
         XmlParser.Builder builder = XmlParser
                 .create()
                 .ignoreUnknownBeanProperties()
@@ -40,14 +39,14 @@ public class Parser {
 
         System.out.println("id: "+feed.getId().toString() );
         System.out.println(" title: " +feed.getTitle().toString());
-        System.out.println("Update : "+ feed.getUpdated());
-        System.out.println("author : "+feed.getAuthor().getName());
-        System.out.println("Link : ");
-        System.out.println("Link : "+feed.getLink().get(0));
-        System.out.println(feed.getEntry().get(0).getTitle());
-        System.out.println(feed.getEntry().get(0).getUpdated());
-        System.out.println(feed.getEntry().get(0).getCategory().getTerm());
-        System.out.println(feed.getEntry().get(0).getLink().get(0).getHref());
+//        System.out.println("Update : "+ feed.getUpdated());
+//        System.out.println("author : "+feed.getAuthor().getName());
+//        System.out.println("Link : ");
+//        System.out.println("Link : "+feed.getLink().get(0));
+//        System.out.println(feed.getEntry().get(0).getTitle());
+//        System.out.println(feed.getEntry().get(0).getUpdated());
+//        System.out.println(feed.getEntry().get(0).getCategory().getTerm());
+//        System.out.println(feed.getEntry().get(0).getLink().get(0).getHref());
 
 
         return feed.getEntry().stream()
