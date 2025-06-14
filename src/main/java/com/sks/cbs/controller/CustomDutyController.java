@@ -97,7 +97,7 @@ public class CustomDutyController {
     /**
      * Get raw XML response from external API
      */
-    @GetMapping("/raw-xml")
+    @GetMapping("/raw-xml") // output https://IPORTAL-IPORTAIL.CBSA-ASFC.CA:443/sap/opu/odata/sap/TARIFF/gstCodes2025-06-14T03:14:41Zhttps://IPORTAL-IPORTAIL.CBSA-ASFC.CA:443/sap/opu/odata/sap/TARIFF/gstCodes(GSTCode='01',AsOfDate=datetime'2025-06-13T00%3A00%3A00')2025-06-14T03:14:41Z012025-06-13T00:00:00EN1991-01-01T00:00:009999-12-31T00:00:00true1VfalseNORMAL RATE2021-05-25T00:00:00https://IPORTAL-IPORTAIL.CBSA-ASFC.CA:443/sap/opu/odata/sap/TARIFF/gstCodes(GSTCode='48',AsOfDate=datetime'2025-06-13T00%3A00%3A00')2025-06-14T03:14:41Z482025-06-13T00:00:00EN2024-10-21T00:00:009999-12-31T00:00:00true2EfalsePublications supplied by non-resident registrant -regulations2024-08-16T00:00:00https://IPORTAL-IPORTAIL.CBSA-ASFC.CA:443/sap/opu/odata/sap/TARIFF/gstCodes(GSTCode='49',AsOfDate=datetime'2025-06-13T00%3A00%3A00')2025-06-14T03:14:41Z492025-06-13T00:00:00EN2024-10-21T00:00:009999-12-31T00:00:00true2EfalseStocks, bond certifications, money2024-08-13T00:00:00https://IPORTAL-IPORTAIL.CBSA-ASFC.CA:443/sap/opu/odata/sap/TARIFF/gstCodes(GSTCode='51',AsOfDate=datetime'2025-06-13T00%3A00%3A00')2025-06-14T03:14:41Z512025-06-13T00:00:00EN2024-10-
     public Mono<ResponseEntity<String>> getRawXml() {
         log.info("Fetching raw XML from external API");
 
